@@ -54,26 +54,28 @@ def contacts(cursor):
     front_page = False
     return render_template("list.html", table=table, headers=headers, front_page=front_page)
 
-'''
-Applicants page [/applicants]
-On this page you should show the result of a query that returns the first name and
-the code of the applicants plus the creation_date of the application
-(joining with the applicants_mentors table) ordered by the creation_date in descending order
-BUT only for applications later than 2016-01-01
-columns: applicants.first_name, applicants.application_code, applicants_mentors.creation_date
-'''
+
 @database_common.connection_handler
 def applicants(cursor):
-    cursor.execute("""SELECT
-                      FROM JOIN
-                      ON
-                      ORDER BY ;""")
+    cursor.execute("""SELECT first_name, application_code, creation_date
+                      FROM applicants JOIN applicants_mentors
+                      ON applicants.id = applicants_mentors.applicant_id
+                      WHERE creation_date > '2016-01-01'::date
+                      ORDER BY creation_date DESC;""")
     table = cursor.fetchall()
-    headers = ["first_name", "last_name", "school_name", "country"]
+    headers = ["first_name", "application_code", "creation_date"]
     front_page = False
     return render_template("list.html", table=table, headers=headers, front_page=front_page)
 
-
+'''
+Applicants and mentors page [/applicants-and-mentors]
+On this page you should show the result of a query that returns the first name
+and the code of the applicants plus the name of the assigned mentor
+(joining through the applicants_mentors table) ordered by the applicants id column
+Show all the applicants, even if they have no assigned mentor in the database!
+In this case use the string "No data" instead of the mentor name.
+columns: applicants.first_name, applicants.application_code, mentors.first_name, mentors.last_name
+'''
 @database_common.connection_handler
 def applicants_and_mentors(cursor):
     cursor.execute("""SELECT
