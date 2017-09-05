@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Application Process</title>
+        <!-- <link rel="stylesheet" href="/static/style.css"> -->
+    </head>
+    <body>
+    {% if front_page %}
+        <a href="/mentors">Mentors and schools</a><br>
+        <a href="/all-school">All school</a><br>
+        <a href="/mentors-by-country">Mentors by country</a><br>
+        <a href="/contacts">Contacts</a><br>
+        <a href="/applicants">Applicants</a><br>
+        <a href="/applicants-and-mentors">Applicants and mentors</a><br>
+    {% else %}
+        <table>
+            <tr>
+                {% for header in headers %}
+                <th>{{ header }}</th>
+                {% endfor %}
+            </tr>
+            {% for row in table %}
+                <tr>
+                    {% for header in headers %}
+                    <td>{{ row[header] }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+    </body>
+</html>
