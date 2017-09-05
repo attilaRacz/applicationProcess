@@ -44,24 +44,24 @@ def mentors_by_country(cursor):
     return render_template("list.html", table=table, headers=headers, front_page=front_page)
 
 
-'''
-Mentors by country page [/mentors-by-country]
-On this page you should show the result of a query that returns the number of the mentors per country
-ordered by the name of the countries
-columns: country, count
-'''
 @database_common.connection_handler
 def contacts(cursor):
-    cursor.execute("""SELECT
-                      FROM JOIN
-                      ON
-                      ORDER BY ;""")
+    cursor.execute("""SELECT name AS school_name, first_name, last_name
+                      FROM schools JOIN mentors
+                      ON schools.contact_person = mentors.id;""")
     table = cursor.fetchall()
-    headers = ["first_name", "last_name", "school_name", "country"]
+    headers = ["school_name", "first_name", "last_name"]
     front_page = False
     return render_template("list.html", table=table, headers=headers, front_page=front_page)
 
-
+'''
+Applicants page [/applicants]
+On this page you should show the result of a query that returns the first name and
+the code of the applicants plus the creation_date of the application
+(joining with the applicants_mentors table) ordered by the creation_date in descending order
+BUT only for applications later than 2016-01-01
+columns: applicants.first_name, applicants.application_code, applicants_mentors.creation_date
+'''
 @database_common.connection_handler
 def applicants(cursor):
     cursor.execute("""SELECT
